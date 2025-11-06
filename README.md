@@ -1,6 +1,6 @@
 # Steve
 
-I built Cursor for Minecraft. Instead of AI that helps you write code, you get AI agents that actually play the game with you.
+We built Cursor for Minecraft. Instead of AI that helps you write code, you get AI agents that actually play the game with you.
 
 ## What It Does
 
@@ -30,9 +30,9 @@ The key thing is the LLM doesn't directly control anything. It just generates pl
 
 This is basically the same architecture as AutoGPT or LangChain agents, just applied to Minecraft instead of web browsing or data analysis.
 
-## Multi-Agent Stuff
+## Multi-Agent Coordination
 
-The interesting part is when you have multiple Steves working together. I built a coordination system so they don't step on each other's toes.
+The interesting part is when you have multiple Steves working together. We built a coordination system so they don't step on each other's toes.
 
 When you tell several agents to build the same structure, they:
 - Automatically split it into sections
@@ -40,7 +40,7 @@ When you tell several agents to build the same structure, they:
 - Don't place blocks in the same spot
 - Rebalance work if someone finishes early
 
-It's pretty simple under the hood, just a manager that tracks who's working on what. But it means you can actually scale up your workforce.
+The coordination happens server-side through a manager that tracks active builds and assigns work. It's deterministic, so there's no race conditions or weird conflicts.
 
 ## Setup
 
@@ -67,12 +67,12 @@ temperature = 0.7
 
 Then just spawn a Steve with `/steve spawn Bob` and press K to start using them.
 
-## How I Built This
+## How We Built This
 
 **Tech Stack:**
 - Minecraft Forge 47.2.0 for the modding framework
 - Java 17
-- OpenAI API for the agent reasoning (but it's pluggable, I also support Groq and Gemini)
+- OpenAI API for the agent reasoning (pluggable, also supports Groq and Gemini)
 - Standard Minecraft pathfinding for movement
 
 **Architecture:**
@@ -83,19 +83,19 @@ The core is in the agent package. Each Steve runs a ReAct-style loop:
 - Observe the results
 - Repeat
 
-I built an action system that gives the LLM a vocabulary of things it can do. Actions like "mine", "place", "navigate", "attack". Each action is a Java class that handles the actual Minecraft mechanics.
+We built an action system that gives the LLM a vocabulary of things it can do. Actions like "mine", "place", "navigate", "attack". Each action is a Java class that handles the actual Minecraft mechanics.
 
-The LLM's job is just to pick which actions to use and in what order. It's constrained to output JSON that matches my action schema, which makes parsing easy and execution reliable.
+The LLM's job is to pick which actions to use and in what order. It's constrained to output JSON that matches our action schema, which makes parsing straightforward and execution deterministic.
 
 For memory, each Steve maintains a conversation history and context about the world. This gets injected into every LLM call so agents can handle follow-up commands without you repeating context.
 
-The collaborative building system was trickier. I had to build a manager that:
+The collaborative building system was trickier. We had to build a manager that:
 - Divides structures into spatial sections
 - Assigns Steves to sections
 - Prevents conflicts when placing blocks
 - Handles reassignment when Steves finish
 
-It's all deterministic and server-side, so there's no weird race conditions.
+It's all deterministic and server-side, so there's no weird race conditions or synchronization issues.
 
 **Project Structure:**
 ```
@@ -144,15 +144,15 @@ The agents are pretty good at figuring out what you mean. You don't need to be s
 
 **The agents are only as smart as the LLM.** GPT-3.5 works but makes occasional weird decisions. GPT-4 is noticeably better at multi-step planning.
 
-**No crafting yet.** Agents can mine and place blocks but can't craft tools. I'm working on it.
+**No crafting yet.** Agents can mine and place blocks but can't craft tools. We're working on it.
 
 **Actions are synchronous.** If a Steve is mining, it can't do anything else until done. Planning to add proper async execution.
 
-**Memory resets on restart.** Right now context only persists during a play session. Adding persistent memory with a vector DB soon.
+**Memory resets on restart.** Right now context only persists during a play session. We're adding persistent memory with a vector DB.
 
 ## What's Next
 
-Things I'm adding:
+Things we're working on:
 - Crafting system so agents can make their own tools
 - Voice commands via Whisper API
 - Vector database for long-term memory
@@ -171,11 +171,11 @@ If you want to add stuff:
 
 If you're adding new actions, update the prompt template in `PromptBuilder.java` so the LLM knows about them.
 
-## Why I Made This
+## Why We Made This
 
-I wanted to see if the Cursor model could work outside of coding. Turns out it translates pretty well. Same principles: deep environment integration, clear action primitives, persistent context.
+We wanted to see if the Cursor model could work outside of coding. Turns out it translates pretty well. Same principles: deep environment integration, clear action primitives, persistent context.
 
-Minecraft is actually a good testbed for this stuff. Complex enough to be interesting, constrained enough that agents can actually succeed.
+Minecraft is actually a good testbed for agent research. Complex enough to be interesting, constrained enough that agents can actually succeed.
 
 Plus it's just fun watching AIs build castles while you explore.
 
