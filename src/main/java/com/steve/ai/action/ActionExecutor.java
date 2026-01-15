@@ -2,8 +2,8 @@ package com.steve.ai.action;
 
 import com.steve.ai.SteveMod;
 import com.steve.ai.action.actions.*;
-import com.steve.ai.ai.ResponseParser;
-import com.steve.ai.ai.TaskPlanner;
+import com.steve.ai.llm.ResponseParser;
+import com.steve.ai.llm.TaskPlanner;
 import com.steve.ai.config.SteveConfig;
 import com.steve.ai.entity.SteveEntity;
 

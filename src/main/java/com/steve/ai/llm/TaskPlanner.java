@@ -1,4 +1,4 @@
-package com.steve.ai.ai;
+package com.steve.ai.llm;
 
 import com.steve.ai.SteveMod;
 import com.steve.ai.action.Task;

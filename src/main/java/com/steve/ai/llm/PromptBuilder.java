@@ -1,4 +1,4 @@
-package com.steve.ai.ai;
+package com.steve.ai.llm;
 
 import com.steve.ai.entity.SteveEntity;
 import com.steve.ai.memory.WorldKnowledge;
