@@ -1,6 +1,7 @@
 package com.steve.ai.action;
 
 import com.steve.ai.SteveMod;
+import com.steve.ai.structure.BlockPlacement;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Block;
 
@@ -156,17 +157,7 @@ public class CollaborativeBuildManager {
             return blocks.size();
         }
     }
-    
-    public static class BlockPlacement {
-        public final BlockPos pos;
-        public final Block block;
-        
-        public BlockPlacement(BlockPos pos, Block block) {
-            this.pos = pos;
-            this.block = block;
-        }
-    }
-    
+
     private static final Map<String, CollaborativeBuild> activeBuilds = new ConcurrentHashMap<>();
     
     /**

@@ -13,16 +13,6 @@ import java.util.List;
  */
 public class StructureGenerators {
 
-    public static class BlockPlacement {
-        public final BlockPos pos;
-        public final Block block;
-
-        public BlockPlacement(BlockPos pos, Block block) {
-            this.pos = pos;
-            this.block = block;
-        }
-    }
-
     public static List<BlockPlacement> generate(String structureType, BlockPos start, int width, int height, int depth, List<Block> materials) {
         return switch (structureType.toLowerCase()) {
             case "house", "home" -> buildAdvancedHouse(start, width, height, depth, materials);
